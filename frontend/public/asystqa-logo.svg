@@ -1,0 +1,21 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title>AsystQA logo</title>
+  <desc>Hexagon-shaped blue logo with a stylized A and Q for AsystQA</desc>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ef" />
+      <stop offset="100%" stop-color="#0b7eff" />
+    </linearGradient>
+    <linearGradient id="innerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#d5f2ff" stop-opacity="0.75" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="#040711" />
+  <path d="M106 171.5L256 95l150 76.5v158L256 417l-150-87.5v-158z" fill="none" stroke="url(#gradient)" stroke-width="24" stroke-linejoin="round" />
+  <path d="M200 186l56-86 56 86" fill="none" stroke="url(#innerGradient)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M224 216h68l-34 86" fill="none" stroke="url(#innerGradient)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="268" cy="294" r="48" fill="none" stroke="url(#innerGradient)" stroke-width="24" />
+  <path d="M298 310l28 26" fill="none" stroke="url(#innerGradient)" stroke-width="20" stroke-linecap="round" />
+  <circle cx="284" cy="294" r="12" fill="#0af" />
+</svg>

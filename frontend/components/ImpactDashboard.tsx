@@ -1,106 +1,128 @@
 "use client";
 
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
+  Area,
+  AreaChart,
+  Bar,
   BarChart,
-  Bar
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
 } from "recharts";
 
-import { revenueData, departmentImpact } from "@/data/mockData";
+import { departmentImpact, revenueData } from "@/data/mockData";
+
+const tooltipStyle = {
+  background: "#030814",
+  border: "1px solid rgba(117, 186, 255, 0.2)",
+  borderRadius: "8px",
+  color: "#f7fbff"
+};
 
 export default function ImpactDashboard() {
   return (
-    <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-      <div className="glass rounded-3xl p-6">
-        <h3 className="text-xl font-bold mb-1">Revenue Forecast</h3>
-        <p className="text-sm text-slate-400 mb-5">
-          Predicted revenue impact after simulated support load increase.
-        </p>
+    <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="glass rounded-lg p-5 xl:col-span-2">
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold">Forecast</h3>
+            <p className="text-sm text-slate-400">
+              Baseline revenue vs. simulated support surge and churn pressure.
+            </p>
+          </div>
+          <div className="hidden items-center gap-4 text-xs text-slate-400 md:flex">
+            <span className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-slate-500" />
+              Baseline
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-cyan-300" />
+              Simulated
+            </span>
+          </div>
+        </div>
 
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={revenueData}>
-              <XAxis dataKey="month" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip
-                contentStyle={{
-                  background: "#020617",
-                  border: "1px solid #1e293b",
-                  borderRadius: "12px"
-                }}
-              />
+            <LineChart data={revenueData} margin={{ left: -18, right: 12, top: 8, bottom: 0 }}>
+              <CartesianGrid stroke="rgba(117, 186, 255, 0.08)" vertical={false} />
+              <XAxis dataKey="month" stroke="#64748b" tickLine={false} axisLine={false} />
+              <YAxis stroke="#64748b" tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={tooltipStyle} />
               <Line
                 type="monotone"
                 dataKey="baseline"
                 stroke="#64748b"
-                strokeWidth={3}
+                strokeWidth={2}
+                dot={false}
               />
               <Line
                 type="monotone"
                 dataKey="simulated"
-                stroke="#3b82f6"
+                stroke="#26d9ff"
                 strokeWidth={3}
+                dot={{ r: 3, fill: "#26d9ff", strokeWidth: 0 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="glass rounded-3xl p-6">
-        <h3 className="text-xl font-bold mb-1">Department Stress</h3>
-        <p className="text-sm text-slate-400 mb-5">
-          Burnout, SLA pressure, and operational strain by department.
+      <div className="glass rounded-lg p-5">
+        <h3 className="text-lg font-semibold">Department Strain</h3>
+        <p className="mb-4 text-sm text-slate-400">
+          Burnout, SLA, and productivity pressure by function.
         </p>
 
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={departmentImpact}>
-              <XAxis dataKey="department" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip
-                contentStyle={{
-                  background: "#020617",
-                  border: "1px solid #1e293b",
-                  borderRadius: "12px"
-                }}
-              />
-              <Bar dataKey="risk" fill="#3b82f6" radius={[10, 10, 0, 0]} />
+            <BarChart data={departmentImpact} margin={{ left: -22, right: 4, top: 8, bottom: 0 }}>
+              <CartesianGrid stroke="rgba(117, 186, 255, 0.08)" vertical={false} />
+              <XAxis dataKey="department" stroke="#64748b" tickLine={false} axisLine={false} />
+              <YAxis stroke="#64748b" tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Bar dataKey="risk" fill="#2f7dff" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="xl:col-span-2 glass rounded-3xl p-6">
-        <h3 className="text-xl font-bold mb-4">AI Simulation Result</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-2xl bg-red-950/40 border border-red-900">
-            <p className="text-sm text-red-300">Burnout Risk</p>
-            <h4 className="text-3xl font-bold mt-2">High</h4>
-            <p className="text-sm text-slate-400 mt-2">
-              Support team overload likely within 18 days.
+      <div className="glass rounded-lg p-5 xl:col-span-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div>
+            <h3 className="text-lg font-semibold">Customer Churn Curve</h3>
+            <p className="mt-1 text-sm leading-6 text-slate-400">
+              Customer behavior agent predicts churn acceleration after response
+              time breaches and complaint escalation.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-yellow-950/40 border border-yellow-900">
-            <p className="text-sm text-yellow-300">SLA Failure Risk</p>
-            <h4 className="text-3xl font-bold mt-2">67%</h4>
-            <p className="text-sm text-slate-400 mt-2">
-              Response time may exceed contract limits.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-blue-950/40 border border-blue-900">
-            <p className="text-sm text-blue-300">Hiring Need</p>
-            <h4 className="text-3xl font-bold mt-2">+8</h4>
-            <p className="text-sm text-slate-400 mt-2">
-              Recommended additional support specialists.
-            </p>
+          <div className="h-48 lg:col-span-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={revenueData} margin={{ left: -18, right: 12, top: 8, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="churn-gradient" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#ff4d61" stopOpacity={0.42} />
+                    <stop offset="100%" stopColor="#ff4d61" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="rgba(117, 186, 255, 0.08)" vertical={false} />
+                <XAxis dataKey="month" stroke="#64748b" tickLine={false} axisLine={false} />
+                <YAxis stroke="#64748b" tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={tooltipStyle} />
+                <Area
+                  type="monotone"
+                  dataKey="churn"
+                  stroke="#ff4d61"
+                  fill="url(#churn-gradient)"
+                  strokeWidth={3}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>

@@ -2,8 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Corporate Digital Twin",
-  description: "AI-powered live business simulation platform"
+  title: "AsystQA AI Command Center",
+  description: "Observe. Analyze. Automate. Assure."
 };
 
 export default function RootLayout({
