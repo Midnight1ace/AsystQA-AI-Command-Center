@@ -6,7 +6,7 @@ from agents.governance_agent import analyze_governance
 
 from orchestrator.cascade_engine import generate_cascade
 from orchestrator.forecasting_engine import generate_forecast
-
+from services.gemini_service import improve_with_gemini
 
 def get_risk_level(score):
     if score >= 75:
@@ -86,7 +86,7 @@ def run_simulation(request):
     recommendations = generate_recommendations(request.scenario.type, overall_risk_score)
     governance = analyze_governance(agent_results, overall_risk_score)
 
-    return {
+    simulation_data = {
         "company_name": request.company_name,
         "industry": request.industry,
         "scenario": request.scenario.description,
@@ -98,3 +98,9 @@ def run_simulation(request):
         "recommendations": recommendations,
         "governance": governance
     }
+
+    executive_report = improve_with_gemini(simulation_data)
+
+    simulation_data["executive_report"] = executive_report
+
+    return simulation_data
