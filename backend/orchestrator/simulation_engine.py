@@ -1,3 +1,9 @@
+from orchestrator.analytics_engine import (
+    generate_heatmap,
+    generate_operational_metrics,
+    generate_risk_trend,
+    generate_department_status
+)
 from orchestrator.activity_engine import generate_agent_activity
 from agents.staffing_agent import analyze_staffing
 from agents.revenue_agent import analyze_revenue
@@ -87,20 +93,30 @@ def run_simulation(request):
     recommendations = generate_recommendations(request.scenario.type, overall_risk_score)
     governance = analyze_governance(agent_results, overall_risk_score)
     agent_activity = generate_agent_activity(agent_results)
+    risk_heatmap = generate_heatmap(agent_results)
+    operational_metrics = generate_operational_metrics(overall_risk_score)
+    risk_trend = generate_risk_trend(overall_risk_score)
+    department_status = generate_department_status(agent_results)
 
     simulation_data = {
-        "company_name": request.company_name,
-        "industry": request.industry,
-        "scenario": request.scenario.description,
-        "overall_risk_score": overall_risk_score,
-        "risk_level": risk_level,
-        "agents": agent_results,
-        "cascade": cascade,
-        "forecast": forecast,
-        "recommendations": recommendations,
-        "governance": governance,
-        "agent_activity": agent_activity
-    }
+    "company_name": request.company_name,
+    "industry": request.industry,
+    "scenario": request.scenario.description,
+    "overall_risk_score": overall_risk_score,
+    "risk_level": risk_level,
+    "agents": agent_results,
+    "cascade": cascade,
+    "forecast": forecast,
+    "recommendations": recommendations,
+
+    "governance": governance,
+    "agent_activity": agent_activity,
+
+    "risk_heatmap": risk_heatmap,
+    "operational_metrics": operational_metrics,
+    "risk_trend": risk_trend,
+    "department_status": department_status
+}
 
     executive_report = improve_with_gemini(simulation_data)
 
