@@ -1,3 +1,4 @@
+from orchestrator.activity_engine import generate_agent_activity
 from agents.staffing_agent import analyze_staffing
 from agents.revenue_agent import analyze_revenue
 from agents.infrastructure_agent import analyze_infrastructure
@@ -85,6 +86,7 @@ def run_simulation(request):
     forecast = generate_forecast(overall_risk_score)
     recommendations = generate_recommendations(request.scenario.type, overall_risk_score)
     governance = analyze_governance(agent_results, overall_risk_score)
+    agent_activity = generate_agent_activity(agent_results)
 
     simulation_data = {
         "company_name": request.company_name,
@@ -96,7 +98,8 @@ def run_simulation(request):
         "cascade": cascade,
         "forecast": forecast,
         "recommendations": recommendations,
-        "governance": governance
+        "governance": governance,
+        "agent_activity": agent_activity
     }
 
     executive_report = improve_with_gemini(simulation_data)
