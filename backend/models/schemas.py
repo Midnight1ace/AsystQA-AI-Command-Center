@@ -31,3 +31,7 @@ class SimulationRequest(BaseModel):
     employees: Employees
     metrics: Metrics
     scenario: Scenario
+    
+class ScenarioComparisonRequest(BaseModel):
+    simulation_a: SimulationRequest
+    simulation_b: SimulationRequest

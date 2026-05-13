@@ -1,8 +1,13 @@
+from orchestrator.comparison_engine import compare_simulations
 from data.demo_data import DEMO_COMPANY_PROFILE, DEMO_SIMULATIONS
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from models.schemas import SimulationRequest
+from models.schemas import (
+    SimulationRequest,
+    ScenarioComparisonRequest
+
+)
 from orchestrator.simulation_engine import run_simulation
 
 app = FastAPI(
@@ -75,3 +80,15 @@ def simulate(request: SimulationRequest):
     result = run_simulation(request)
     return result
     
+@app.post("/compare-scenarios")
+def compare_scenarios(request: ScenarioComparisonRequest):
+
+    simulation_a = run_simulation(request.simulation_a)
+    simulation_b = run_simulation(request.simulation_b)
+
+    comparison = compare_simulations(
+        simulation_a,
+        simulation_b
+    )
+
+    return comparison
