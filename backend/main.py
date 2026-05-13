@@ -1,3 +1,4 @@
+from utils.response_formatter import success_response
 from orchestrator.comparison_engine import compare_simulations
 from data.demo_data import DEMO_COMPANY_PROFILE, DEMO_SIMULATIONS
 from fastapi import FastAPI
@@ -41,14 +42,17 @@ def health_check():
     }
 @app.get("/demo/company-profile")
 def demo_company_profile():
-    return DEMO_COMPANY_PROFILE
-
+    return success_response(
+        DEMO_COMPANY_PROFILE,
+        "Demo company profile loaded"
+    )
 
 @app.get("/demo/simulations")
 def demo_simulations():
-    return {
-        "simulations": DEMO_SIMULATIONS
-    }
+    return success_response(
+        {"simulations": DEMO_SIMULATIONS},
+        "Demo simulations loaded"
+    )
 
 
 @app.get("/demo-scenarios")
@@ -78,7 +82,11 @@ def demo_scenarios():
 @app.post("/simulate")
 def simulate(request: SimulationRequest):
     result = run_simulation(request)
-    return result
+
+    return success_response(
+        result,
+        "Simulation completed successfully"
+    )
     
 @app.post("/compare-scenarios")
 def compare_scenarios(request: ScenarioComparisonRequest):
@@ -91,4 +99,7 @@ def compare_scenarios(request: ScenarioComparisonRequest):
         simulation_b
     )
 
-    return comparison
+    return success_response(
+        comparison,
+        "Scenario comparison completed successfully"
+    )
