@@ -1,3 +1,4 @@
+from data.demo_data import DEMO_COMPANY_PROFILE, DEMO_SIMULATIONS
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -32,6 +33,16 @@ def health_check():
     return {
         "status": "healthy",
         "service": "TwinOps AI"
+    }
+@app.get("/demo/company-profile")
+def demo_company_profile():
+    return DEMO_COMPANY_PROFILE
+
+
+@app.get("/demo/simulations")
+def demo_simulations():
+    return {
+        "simulations": DEMO_SIMULATIONS
     }
 
 
