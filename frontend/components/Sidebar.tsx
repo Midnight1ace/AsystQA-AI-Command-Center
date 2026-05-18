@@ -1,6 +1,5 @@
 import {
   Activity,
-  BarChart3,
   Brain,
   Building2,
   FileText,
@@ -9,28 +8,43 @@ import {
   Route,
   Server,
   Settings,
-  ShieldCheck,
   Truck,
   Users
 } from "lucide-react";
 
-const items = [
-  { label: "Digital Twin", icon: Building2 },
-  { label: "Simulation", icon: Activity },
-  { label: "Staffing", icon: Users },
-  { label: "Revenue", icon: Landmark },
-  { label: "Infrastructure", icon: Server },
-  { label: "Logistics", icon: Truck },
-  { label: "Customer Behavior", icon: Route },
-  { label: "AI Agents", icon: Brain },
-  { label: "Reports", icon: FileText },
-  { label: "Governance", icon: ShieldCheck },
-  { label: "Settings", icon: Settings }
-];
+export type TabId =
+  | "digital-twin"
+  | "simulation"
+  | "staffing"
+  | "revenue"
+  | "logistics"
+  | "infrastructure"
+  | "customer-behavior"
+  | "ai-agents"
+  | "reports"
+  | "settings";
 
-export default function Sidebar() {
+export const commandCenterTabs = [
+  { id: "digital-twin", label: "Digital Twin", icon: Building2 },
+  { id: "simulation", label: "Simulation", icon: Activity },
+  { id: "staffing", label: "Staffing", icon: Users },
+  { id: "revenue", label: "Revenue", icon: Landmark },
+  { id: "logistics", label: "Logistics", icon: Truck },
+  { id: "infrastructure", label: "Infrastructure", icon: Server },
+  { id: "customer-behavior", label: "Customer Behavior", icon: Route },
+  { id: "ai-agents", label: "AI Agents", icon: Brain },
+  { id: "reports", label: "Reports", icon: FileText },
+  { id: "settings", label: "Settings", icon: Settings }
+] as const;
+
+type Props = {
+  activeTab: TabId;
+  onTabChange: (tab: TabId) => void;
+};
+
+export default function Sidebar({ activeTab, onTabChange }: Props) {
   return (
-    <aside className="hidden lg:flex w-72 min-h-screen shrink-0 border-r border-cyan-300/10 bg-[#030814]/92 px-4 py-5 flex-col justify-between">
+    <aside className="hidden min-h-screen w-72 shrink-0 flex-col justify-between border-r border-cyan-300/10 bg-[#030814]/92 px-4 py-5 lg:flex">
       <div>
         <div className="mb-7 border-b border-cyan-300/10 pb-5">
           <div className="flex items-center gap-3">
@@ -47,21 +61,24 @@ export default function Sidebar() {
         </div>
 
         <nav className="space-y-1">
-          {items.map((item, index) => {
+          {commandCenterTabs.map((item) => {
             const Icon = item.icon;
+            const isActive = activeTab === item.id;
 
             return (
               <button
-                key={item.label}
+                key={item.id}
+                type="button"
+                onClick={() => onTabChange(item.id)}
                 className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
-                  index === 0
+                  isActive
                     ? "border border-cyan-300/30 bg-cyan-300/12 text-cyan-100 shadow-[0_0_24px_rgba(38,217,255,0.12)]"
                     : "border border-transparent text-slate-400 hover:border-cyan-300/15 hover:bg-slate-900/80 hover:text-slate-100"
                 }`}
               >
                 <Icon
                   size={17}
-                  className={index === 0 ? "text-cyan-200" : "text-slate-500 group-hover:text-cyan-200"}
+                  className={isActive ? "text-cyan-200" : "text-slate-500 group-hover:text-cyan-200"}
                 />
                 <span className="truncate">{item.label}</span>
               </button>

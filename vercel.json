@@ -1,0 +1,18 @@
+{
+  "experimentalServices": {
+    "api": {
+      "entrypoint": "backend/main.py",
+      "routePrefix": "/api",
+      "includeFiles": [
+        "backend/**"
+      ]
+    },
+    "web": {
+      "entrypoint": "frontend",
+      "routePrefix": "/"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "/api"
+  }
+}

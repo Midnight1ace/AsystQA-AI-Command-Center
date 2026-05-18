@@ -1,7 +1,14 @@
 import { Check, Sparkles } from "lucide-react";
-import { recommendations } from "@/data/mockData";
+import { recommendations as mockRecommendations } from "@/data/mockData";
+import type { Recommendation } from "@/lib/dashboardData";
 
-export default function ExecutiveRecommendations() {
+type Props = {
+  recommendations?: Recommendation[];
+};
+
+export default function ExecutiveRecommendations({
+  recommendations = mockRecommendations
+}: Props) {
   return (
     <section className="glass rounded-lg p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
@@ -10,7 +17,7 @@ export default function ExecutiveRecommendations() {
           <h3 className="text-lg font-semibold">Executive Recommendations</h3>
         </div>
         <span className="rounded-md border border-cyan-300/20 bg-cyan-300/10 px-2 py-1 text-xs text-cyan-100">
-          4 actions
+          {recommendations.length} actions
         </span>
       </div>
 

@@ -1,20 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Play, RotateCcw, SlidersHorizontal } from "lucide-react";
+import type { DemoSimulation } from "@/lib/api";
+import { defaultScenario } from "@/lib/dashboardData";
 
-const scenarios = [
-  "Support tickets increase by 40%",
-  "Users grow by 300%",
-  "20% of engineers resign",
-  "Cloud region fails"
+type Props = {
+  scenarios?: DemoSimulation[];
+  isRunning?: boolean;
+  onRun?: (input: {
+    scenario: DemoSimulation;
+    description: string;
+    impactPercentage: number;
+    timeHorizon: string;
+  }) => void | Promise<void>;
+};
+
+const timeHorizons = [
+  { label: "30 Days", value: "30_days" },
+  { label: "90 Days", value: "90_days" },
+  { label: "1 Year", value: "1_year" }
 ];
 
-export default function SimulationForm() {
-  const [scenario, setScenario] = useState(
-    "What happens if support tickets increase by 40% over the next 30 days?"
+export default function SimulationForm({
+  scenarios = [defaultScenario],
+  isRunning = false,
+  onRun
+}: Props) {
+  const scenarioOptions = useMemo(
+    () => (scenarios.length ? scenarios : [defaultScenario]),
+    [scenarios]
   );
-  const [scale, setScale] = useState(40);
+  const [selectedScenarioId, setSelectedScenarioId] = useState(scenarioOptions[0].id);
+  const [scenario, setScenario] = useState(scenarioOptions[0].business_question);
+  const [scale, setScale] = useState(scenarioOptions[0].impact_percentage);
+  const [timeHorizon, setTimeHorizon] = useState(scenarioOptions[0].time_horizon);
+
+  const selectedScenario =
+    scenarioOptions.find((item) => item.id === selectedScenarioId) ?? scenarioOptions[0];
+
+  useEffect(() => {
+    const firstScenario = scenarioOptions[0];
+
+    setSelectedScenarioId(firstScenario.id);
+    setScenario(firstScenario.business_question);
+    setScale(firstScenario.impact_percentage);
+    setTimeHorizon(firstScenario.time_horizon);
+  }, [scenarioOptions]);
 
   return (
     <section className="glass rounded-lg p-5">
@@ -56,22 +88,37 @@ export default function SimulationForm() {
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-2">
-        {scenarios.map((item) => (
+        {scenarioOptions.map((item) => (
           <button
-            key={item}
-            onClick={() => setScenario(`What happens if ${item.toLowerCase()}?`)}
-            className="rounded-lg border border-slate-700/70 bg-slate-950/60 px-3 py-2 text-left text-sm text-slate-300 transition hover:border-cyan-300/35 hover:text-cyan-100"
+            key={item.id}
+            onClick={() => {
+              setSelectedScenarioId(item.id);
+              setScenario(item.business_question);
+              setScale(item.impact_percentage);
+              setTimeHorizon(item.time_horizon);
+            }}
+            className={`rounded-lg border px-3 py-2 text-left text-sm transition ${
+              selectedScenarioId === item.id
+                ? "border-cyan-300/45 bg-cyan-300/10 text-cyan-100"
+                : "border-slate-700/70 bg-slate-950/60 text-slate-300 hover:border-cyan-300/35 hover:text-cyan-100"
+            }`}
           >
-            {item}
+            {item.description}
           </button>
         ))}
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-3">
-        <select className="rounded-lg border border-cyan-300/15 bg-slate-950/80 p-3 text-sm outline-none">
-          <option>30 Days</option>
-          <option>90 Days</option>
-          <option>1 Year</option>
+        <select
+          value={timeHorizon}
+          onChange={(event) => setTimeHorizon(event.target.value)}
+          className="rounded-lg border border-cyan-300/15 bg-slate-950/80 p-3 text-sm outline-none"
+        >
+          {timeHorizons.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
+          ))}
         </select>
 
         <select className="rounded-lg border border-cyan-300/15 bg-slate-950/80 p-3 text-sm outline-none">
@@ -82,15 +129,28 @@ export default function SimulationForm() {
       </div>
 
       <div className="mt-5 flex gap-3">
-        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200">
+        <button
+          disabled={isRunning}
+          onClick={() =>
+            onRun?.({
+              scenario: selectedScenario,
+              description: scenario,
+              impactPercentage: scale,
+              timeHorizon
+            })
+          }
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           <Play size={16} />
-          Run Simulation
+          {isRunning ? "Running..." : "Run Simulation"}
         </button>
 
         <button
           onClick={() => {
-            setScenario("What happens if support tickets increase by 40% over the next 30 days?");
-            setScale(40);
+            setSelectedScenarioId(scenarioOptions[0].id);
+            setScenario(scenarioOptions[0].business_question);
+            setScale(scenarioOptions[0].impact_percentage);
+            setTimeHorizon(scenarioOptions[0].time_horizon);
           }}
           className="grid h-11 w-11 place-items-center rounded-lg border border-cyan-300/15 bg-slate-950/70 text-slate-300 transition hover:text-cyan-100"
           aria-label="Reset simulation"

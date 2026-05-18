@@ -1,6 +1,23 @@
 import { Bell, Command, Search, ShieldCheck } from "lucide-react";
 
-export default function Header() {
+type Props = {
+  companyName?: string;
+  confidence?: number;
+  backendStatus?: "connected" | "offline" | "loading";
+};
+
+export default function Header({
+  companyName = "AsystQA AI Command Center",
+  confidence = 93,
+  backendStatus = "loading"
+}: Props) {
+  const statusLabel =
+    backendStatus === "connected"
+      ? "Backend connected"
+      : backendStatus === "offline"
+        ? "Demo fallback"
+        : "Connecting";
+
   return (
     <header className="flex flex-col gap-6 border-b border-cyan-300/10 pb-5 xl:flex-row xl:items-center xl:justify-between">
       <div className="space-y-4">
@@ -15,7 +32,7 @@ export default function Header() {
               AI Command Center
             </p>
             <h2 className="text-3xl font-semibold leading-tight text-white md:text-4xl">
-              AsystQA AI Command Center
+              {companyName}
             </h2>
           </div>
         </div>
@@ -36,10 +53,14 @@ export default function Header() {
           <Command size={15} className="text-slate-600" />
         </div>
 
-        <button className="flex items-center gap-2 rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-3 py-2.5 text-sm font-medium text-emerald-200">
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-3 py-2.5 text-sm font-medium text-emerald-200">
           <ShieldCheck size={16} />
-          93% confidence
-        </button>
+          {confidence}% confidence
+        </div>
+
+        <div className="rounded-lg border border-cyan-300/15 bg-slate-950/70 px-3 py-2.5 text-sm font-medium text-slate-300">
+          {statusLabel}
+        </div>
 
         <button className="grid h-10 w-10 place-items-center rounded-lg border border-cyan-300/15 bg-slate-950/70 text-slate-200 transition hover:border-cyan-300/40 hover:text-cyan-100">
           <Bell size={18} />

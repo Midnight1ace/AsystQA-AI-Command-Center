@@ -1,5 +1,6 @@
 import { Brain, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
-import { agents } from "@/data/mockData";
+import { agents as mockAgents } from "@/data/mockData";
+import type { AgentActivity } from "@/lib/dashboardData";
 
 const stateStyles = {
   running: "text-cyan-200",
@@ -7,7 +8,11 @@ const stateStyles = {
   supervising: "text-orange-200"
 };
 
-export default function AgentPanel() {
+type Props = {
+  agents?: AgentActivity[];
+};
+
+export default function AgentPanel({ agents = mockAgents }: Props) {
   return (
     <section className="glass rounded-lg p-5">
       <div className="mb-4 flex items-center justify-between gap-3">

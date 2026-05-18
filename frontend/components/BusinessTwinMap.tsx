@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Activity, Brain, Building2, Server, ShieldCheck, Truck, Users } from "lucide-react";
-import { twinNodes } from "@/data/mockData";
+import { twinNodes as mockTwinNodes } from "@/data/mockData";
+import type { TwinNode } from "@/lib/dashboardData";
 
 const icons = {
   staffing: Users,
@@ -19,14 +20,22 @@ const severityStyles = {
   danger: "border-red-300/45 bg-red-400/12 text-red-100 shadow-[0_0_26px_rgba(255,77,97,0.2)]"
 };
 
-export default function BusinessTwinMap() {
+type Props = {
+  twinNodes?: TwinNode[];
+  scenario?: string;
+};
+
+export default function BusinessTwinMap({
+  twinNodes = mockTwinNodes,
+  scenario = "the simulated support surge"
+}: Props) {
   return (
     <section className="glass panel-grid scanline relative min-h-[31rem] overflow-hidden rounded-lg p-5">
       <div className="relative z-10 flex items-center justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold">Business Twin Visualization</h3>
           <p className="text-sm text-slate-400">
-            Live operational dependencies reacting to the simulated support surge.
+            Live operational dependencies reacting to {scenario.toLowerCase()}.
           </p>
         </div>
         <div className="rounded-lg border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-xs uppercase tracking-[0.16em] text-cyan-100">

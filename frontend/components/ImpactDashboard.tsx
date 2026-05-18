@@ -14,7 +14,11 @@ import {
   YAxis
 } from "recharts";
 
-import { departmentImpact, revenueData } from "@/data/mockData";
+import {
+  departmentImpact as mockDepartmentImpact,
+  revenueData as mockRevenueData
+} from "@/data/mockData";
+import type { DepartmentImpact, RevenuePoint } from "@/lib/dashboardData";
 
 const tooltipStyle = {
   background: "#030814",
@@ -23,7 +27,15 @@ const tooltipStyle = {
   color: "#f7fbff"
 };
 
-export default function ImpactDashboard() {
+type Props = {
+  revenueData?: RevenuePoint[];
+  departmentImpact?: DepartmentImpact[];
+};
+
+export default function ImpactDashboard({
+  revenueData = mockRevenueData,
+  departmentImpact = mockDepartmentImpact
+}: Props) {
   return (
     <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
       <div className="glass rounded-lg p-5 xl:col-span-2">

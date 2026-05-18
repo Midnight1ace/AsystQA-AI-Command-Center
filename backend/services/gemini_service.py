@@ -1,12 +1,14 @@
 import os
 import json
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 
 def improve_with_gemini(simulation_data):
@@ -19,9 +21,7 @@ def improve_with_gemini(simulation_data):
         return create_fallback_report(simulation_data)
 
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
-
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        client = genai.Client(api_key=GEMINI_API_KEY)
 
         prompt = f"""
 You are an enterprise AI strategy analyst.
@@ -47,7 +47,14 @@ Simulation data:
 {json.dumps(simulation_data, indent=2)}
 """
 
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=GEMINI_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                temperature=0.2
+            )
+        )
         text = response.text.strip()
 
         # Clean possible markdown formatting if Gemini returns ```json

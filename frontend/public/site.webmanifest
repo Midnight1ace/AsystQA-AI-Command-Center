@@ -1,0 +1,17 @@
+{
+  "name": "AsystQA AI Command Center",
+  "short_name": "AsystQA",
+  "description": "Observe. Analyze. Automate. Assure.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#040711",
+  "theme_color": "#040711",
+  "icons": [
+    {
+      "src": "/asystqa-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,7 +1,12 @@
 import { AlertTriangle } from "lucide-react";
-import { timeline } from "@/data/mockData";
+import { timeline as mockTimeline } from "@/data/mockData";
+import type { TimelineItem } from "@/lib/dashboardData";
 
-export default function RiskTimeline() {
+type Props = {
+  timeline?: TimelineItem[];
+};
+
+export default function RiskTimeline({ timeline = mockTimeline }: Props) {
   return (
     <section className="glass rounded-lg p-5">
       <div className="mb-4 flex items-center gap-2">

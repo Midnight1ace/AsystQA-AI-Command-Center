@@ -1,5 +1,6 @@
 import { ArrowDown, GitBranch, Zap } from "lucide-react";
-import { cascadeSteps } from "@/data/mockData";
+import { cascadeSteps as mockCascadeSteps } from "@/data/mockData";
+import type { CascadeStep } from "@/lib/dashboardData";
 
 const severityClasses = {
   warning: "border-orange-300/25 bg-orange-400/10 text-orange-100",
@@ -7,7 +8,11 @@ const severityClasses = {
   stable: "border-emerald-300/25 bg-emerald-400/10 text-emerald-100"
 };
 
-export default function CascadeChain() {
+type Props = {
+  cascadeSteps?: CascadeStep[];
+};
+
+export default function CascadeChain({ cascadeSteps = mockCascadeSteps }: Props) {
   return (
     <section className="glass rounded-lg p-5">
       <div className="mb-4 flex items-center justify-between gap-3">

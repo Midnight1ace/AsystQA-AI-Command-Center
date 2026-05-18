@@ -1,34 +1,70 @@
-# Node / Next.js
+# Dependencies
 node_modules/
 frontend/node_modules/
+
+# Next.js
 frontend/.next/
-frontend/tsconfig.tsbuildinfo
-frontend/.env*
+frontend/out/
 frontend/.vercel/
-frontend/.cache/
+frontend/.turbo/
+frontend/tsconfig.tsbuildinfo
 
 # Python
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-env/
-venv/
+*.so
+.Python
 .venv/
-backend/.env*
+venv/
+env/
+backend/.venv/
+backend/__pycache__/
 
-# Logs
+# Environment files and secrets
+.env
+.env.*
+frontend/.env
+frontend/.env.*
+backend/.env
+backend/.env.*
+!.env.example
+!frontend/.env.example
+!backend/.env.example
+
+# Logs and local process output
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-*.log
+backend/.codex-*.log
+backend/.codex-*.err.log
+frontend/.codex-*.log
+frontend/.codex-*.err.log
+
+# Build and coverage output
+dist/
+build/
+coverage/
+.coverage
+htmlcov/
+docs/video/
+
+# Test and cache output
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+test-results/
+playwright-report/
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Editor directories and files
+# Editor files
 .vscode/
 .idea/
 *.suo
@@ -36,8 +72,3 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
-
-# Misc
-dist/
-build/
-coverage/

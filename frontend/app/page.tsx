@@ -1,56 +1,164 @@
 "use client";
 
-import AgentPanel from "@/components/AgentPanel";
-import BusinessTwinMap from "@/components/BusinessTwinMap";
-import CascadeChain from "@/components/CascadeChain";
-import ExecutiveRecommendations from "@/components/ExecutiveRecommendations";
+import { useCallback, useEffect, useState } from "react";
+import CommandCenterViews, { MobileTabRail } from "@/components/CommandCenterViews";
 import Header from "@/components/Header";
-import ImpactDashboard from "@/components/ImpactDashboard";
-import MetricCard from "@/components/MetricCard";
-import RiskTimeline from "@/components/RiskTimeline";
-import Sidebar from "@/components/Sidebar";
-import SimulationForm from "@/components/SimulationForm";
-import { metrics } from "@/data/mockData";
+import Sidebar, { type TabId } from "@/components/Sidebar";
+import {
+  buildSimulationRequest,
+  createDashboardData,
+  defaultScenario,
+  fallbackDashboardData
+} from "@/lib/dashboardData";
+import {
+  getCompanyProfile,
+  getDemoSimulations,
+  runSimulation,
+  type CompanyProfile,
+  type DemoSimulation
+} from "@/lib/api";
+
+type BackendStatus = "connected" | "offline" | "loading";
 
 export default function HomePage() {
+  const [dashboardData, setDashboardData] = useState(fallbackDashboardData);
+  const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
+  const [scenarios, setScenarios] = useState<DemoSimulation[]>([defaultScenario]);
+  const [backendStatus, setBackendStatus] = useState<BackendStatus>("loading");
+  const [isRunning, setIsRunning] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabId>("digital-twin");
+
+  const executeSimulation = useCallback(
+    async ({
+      profile,
+      scenario,
+      description,
+      impactPercentage,
+      timeHorizon
+    }: {
+      profile?: CompanyProfile | null;
+      scenario: DemoSimulation;
+      description?: string;
+      impactPercentage?: number;
+      timeHorizon?: string;
+    }) => {
+      const activeProfile = profile ?? companyProfile;
+      const request = buildSimulationRequest(
+        activeProfile,
+        scenario,
+        impactPercentage,
+        timeHorizon,
+        description
+      );
+      const result = await runSimulation(request);
+
+      setDashboardData(createDashboardData(result, activeProfile));
+      setBackendStatus("connected");
+      setError(null);
+    },
+    [companyProfile]
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadBackendData() {
+      setBackendStatus("loading");
+      setIsRunning(true);
+
+      try {
+        const [profile, demoScenarios] = await Promise.all([
+          getCompanyProfile(),
+          getDemoSimulations()
+        ]);
+        const nextScenarios = demoScenarios.length ? demoScenarios : [defaultScenario];
+
+        if (cancelled) {
+          return;
+        }
+
+        setCompanyProfile(profile);
+        setScenarios(nextScenarios);
+
+        const request = buildSimulationRequest(profile, nextScenarios[0]);
+        const result = await runSimulation(request);
+
+        if (cancelled) {
+          return;
+        }
+
+        setDashboardData(createDashboardData(result, profile));
+        setBackendStatus("connected");
+        setError(null);
+      } catch (loadError) {
+        if (cancelled) {
+          return;
+        }
+
+        setBackendStatus("offline");
+        setError(loadError instanceof Error ? loadError.message : "Unable to reach backend");
+      } finally {
+        if (!cancelled) {
+          setIsRunning(false);
+        }
+      }
+    }
+
+    loadBackendData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-transparent text-white">
       <div className="flex min-h-screen">
-        <Sidebar />
+        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
         <section className="min-w-0 flex-1 px-4 py-5 md:px-6 xl:px-8">
-          <Header />
+          <Header
+            companyName={dashboardData.companyName}
+            confidence={dashboardData.confidence}
+            backendStatus={backendStatus}
+          />
 
-          <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-6">
-            {metrics.map((metric) => (
-              <MetricCard key={metric.title} {...metric} />
-            ))}
-          </div>
-
-          <div className="mt-5 grid grid-cols-1 gap-4 xl:grid-cols-12">
-            <div className="space-y-4 xl:col-span-3">
-              <SimulationForm />
-              <RiskTimeline />
+          {error ? (
+            <div className="mt-4 rounded-lg border border-orange-300/20 bg-orange-400/10 px-4 py-3 text-sm text-orange-100">
+              Backend offline: showing the built-in demo snapshot.
             </div>
+          ) : null}
 
-            <div className="xl:col-span-6">
-              <BusinessTwinMap />
-            </div>
+          <div className="mt-5">
+            <MobileTabRail activeTab={activeTab} onTabChange={setActiveTab} />
+            <CommandCenterViews
+              activeTab={activeTab}
+              dashboardData={dashboardData}
+              scenarios={scenarios}
+              isRunning={isRunning}
+              onRunSimulation={async ({ scenario, description, impactPercentage, timeHorizon }) => {
+                setIsRunning(true);
 
-            <div className="xl:col-span-3">
-              <AgentPanel />
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-12">
-            <div className="xl:col-span-8">
-              <ImpactDashboard />
-            </div>
-
-            <div className="space-y-4 xl:col-span-4">
-              <CascadeChain />
-              <ExecutiveRecommendations />
-            </div>
+                try {
+                  await executeSimulation({
+                    scenario,
+                    description,
+                    impactPercentage,
+                    timeHorizon
+                  });
+                } catch (simulationError) {
+                  setBackendStatus("offline");
+                  setError(
+                    simulationError instanceof Error
+                      ? simulationError.message
+                      : "Unable to run simulation"
+                  );
+                } finally {
+                  setIsRunning(false);
+                }
+              }}
+            />
           </div>
         </section>
       </div>

@@ -1,0 +1,52 @@
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title>AsystQA AI Command Center wordmark</title>
+  <desc>Full AsystQA brand lockup with icon, AI Command Center subtitle, and Observe Analyze Automate Assure tagline.</desc>
+  <defs>
+    <linearGradient id="brandBlue" x1="396" x2="884" y1="87" y2="492" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1df9ff" />
+      <stop offset="0.45" stop-color="#0d7dff" />
+      <stop offset="1" stop-color="#18f4d5" />
+    </linearGradient>
+    <linearGradient id="wordBlue" x1="820" x2="1184" y1="478" y2="602" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#19f8ff" />
+      <stop offset="1" stop-color="#147cff" />
+    </linearGradient>
+    <linearGradient id="silver" x1="98" x2="773" y1="484" y2="598" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.48" stop-color="#f5f7fa" />
+      <stop offset="1" stop-color="#b8c5cf" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.04 0 0 0 0 0.75 0 0 0 0 1 0 0 0 0.65 0" />
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="720" fill="#040711" />
+  <g filter="url(#glow)">
+    <path d="M640 81 832 201v238L640 589 448 439V201Z" fill="none" stroke="url(#brandBlue)" stroke-width="27" stroke-linejoin="round" />
+    <path d="M546 392 615 222c5-13 30-13 35 0l69 170" fill="none" stroke="#f7fbff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="640" cy="337" r="55" fill="none" stroke="url(#brandBlue)" stroke-width="34" />
+    <path d="M677 373 720 416" fill="none" stroke="url(#brandBlue)" stroke-width="34" stroke-linecap="square" />
+    <path d="M790 303 874 271l84 32v70c0 69-50 111-84 123-34-12-84-54-84-123Z" fill="#061526" fill-opacity="0.84" stroke="url(#brandBlue)" stroke-width="10" />
+    <path d="m834 374 28 28 55-64" fill="none" stroke="#1df9ff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M397 294h48l36 36h63M390 346h122M406 409h42l70-62h53" fill="none" stroke="#0e7cff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="390" cy="294" r="10" fill="#040711" stroke="#0e7cff" stroke-width="7" />
+    <circle cx="390" cy="346" r="10" fill="#040711" stroke="#0e7cff" stroke-width="7" />
+    <circle cx="406" cy="409" r="10" fill="#040711" stroke="#0e7cff" stroke-width="7" />
+    <path d="M590 453v45M627 425v73M664 457v41M701 443v55" stroke="url(#brandBlue)" stroke-width="13" />
+    <path d="M910 230c42 57 53 141 20 211" fill="none" stroke="#0fb8ec" stroke-width="7" stroke-linecap="round" stroke-dasharray="2 18" />
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-weight="800">
+    <text x="97" y="621" fill="url(#silver)" font-size="132" letter-spacing="-5">Asyst</text>
+    <text x="821" y="621" fill="url(#wordBlue)" font-size="132" letter-spacing="-5">QA</text>
+  </g>
+  <text x="241" y="674" fill="#f6f9ff" font-family="Arial, Helvetica, sans-serif" font-size="38" letter-spacing="18">AI COMMAND CENTER</text>
+  <text x="187" y="706" fill="#19dfff" font-family="Arial, Helvetica, sans-serif" font-size="25" letter-spacing="14">OBSERVE. ANALYZE. AUTOMATE. ASSURE.</text>
+  <path d="M92 659h111M1078 659h111" stroke="url(#brandBlue)" stroke-width="4" />
+</svg>
